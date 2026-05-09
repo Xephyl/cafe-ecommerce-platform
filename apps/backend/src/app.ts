@@ -13,7 +13,7 @@ import { apiResponse } from "./utils/apiResponse"
 import { flagsRoutes } from "./routes/flags.routes"
 import { authRoutes } from "./routes/auth.routes"
 import { productRoutes } from "./routes/product.routes"
-import "./models"  // Register all models (Category, Product) with Mongoose
+import { cartRoutes } from "./routes/cart.routes"
 
 export function createApp(): express.Application {
   const app = express()
@@ -36,7 +36,6 @@ export function createApp(): express.Application {
   app.use(express.json({ limit: "10mb" }))
   app.use(express.urlencoded({ extended: true, limit: "10mb" }))
 
-  // Always-on routes — not blocked by MAINTENANCE_MODE
   app.get("/health", (_req, res) => {
     res.status(200).json(
       apiResponse.success({
@@ -47,9 +46,9 @@ export function createApp(): express.Application {
       })
     )
   })
+
   app.use("/api/flags", flagsRoutes)
 
-  // MAINTENANCE_MODE gate — all routes below return 503 when active
   app.use((_req, res, next) => {
     if (getFlag("MAINTENANCE_MODE")) {
       res.status(503).json(
@@ -63,16 +62,15 @@ export function createApp(): express.Application {
     next()
   })
 
-  // Application routes
   app.use("/api/auth",     authRoutes)
   app.use("/api/products", productRoutes)
+  app.use("/api/cart",     cartRoutes)
 
   // Task 1-09: app.use("/api/categories", categoryRoutes)
-  // Task 1-05: app.use("/api/cart",        cartRoutes)
-  // Task 1-06: app.use("/api/orders",      orderRoutes)
-  // Task 1-07: app.use("/api/payments",    paymentRoutes)
-  // Task 1-12: app.use("/api/coupons",     couponRoutes)
-  // Task 1-13: app.use("/api/reviews",     reviewRoutes)
+  // Task 1-06: app.use("/api/orders",     orderRoutes)
+  // Task 1-07: app.use("/api/payments",   paymentRoutes)
+  // Task 1-12: app.use("/api/coupons",    couponRoutes)
+  // Task 1-13: app.use("/api/reviews",    reviewRoutes)
 
   app.use(notFound)
   app.use(errorHandler)

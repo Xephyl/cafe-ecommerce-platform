@@ -35,7 +35,7 @@ export interface PaginatedProducts {
 function listCacheKey(query: ProductListQuery): string {
   const sorted = Object.fromEntries(
     Object.keys(query)
-      .sort()
+      .sort((a, b) => a.localeCompare(b))
       .map((k) => [k, (query as Record<string, string>)[k]])
   )
   const hash = createHash("md5").update(JSON.stringify(sorted)).digest("hex")
