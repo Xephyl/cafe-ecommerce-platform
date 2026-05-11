@@ -14,6 +14,7 @@ import { flagsRoutes } from "./routes/flags.routes"
 import { authRoutes } from "./routes/auth.routes"
 import { productRoutes } from "./routes/product.routes"
 import { cartRoutes } from "./routes/cart.routes"
+import { orderRoutes } from "./routes/order.routes"
 
 export function createApp(): express.Application {
   const app = express()
@@ -65,9 +66,9 @@ export function createApp(): express.Application {
   app.use("/api/auth",     authRoutes)
   app.use("/api/products", productRoutes)
   app.use("/api/cart",     cartRoutes)
+  app.use("/api/orders",   orderRoutes)
 
   // Task 1-09: app.use("/api/categories", categoryRoutes)
-  // Task 1-06: app.use("/api/orders",     orderRoutes)
   // Task 1-07: app.use("/api/payments",   paymentRoutes)
   // Task 1-12: app.use("/api/coupons",    couponRoutes)
   // Task 1-13: app.use("/api/reviews",    reviewRoutes)
